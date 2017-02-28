@@ -1,15 +1,68 @@
 /**
  * @author wangzhe
  *
- * 堆排序
- * 堆排序是一种树形选择排序，是对直接选择排序的有效改进。
- * 
- * 初始时把要排序的数的序列看作是一棵顺序存储的二叉树，调整它们的存储序，使之成为一个堆，
- * 时堆的根节点的数最大。然后将根节点与堆的最后一个节点交换。然后对前面(n-1)个数重新调
- * 整使之成为堆。依此类推，直到只有两个节点的堆，并对 它们作交换，最后得到有n个节点的有
- * 序序列。
- * 从算法描述来看，堆排序需要两个过程，一是建立堆，二是堆顶与堆的最后一个元素交换位置。
- * 所以堆排序有两个函数组成。一是建堆的函数，二是反复调用建堆函数实现排序的函数。
- *
- * 堆排序的时间复杂度也是O(nlogn)
+ * 基数排序
+ * 基数排序（radix sorting）将所有待比较数值(正整数)统一为同样的数位长度，
+ * 数位较短的数前面补零。 然后 从最低位开始，依次进行一次排序。这样从最低位排
+ * 序一直到最高位排序完成以后， 数列就变成一个有序序列
  */
+
+public class RadixSort {
+    public static void radixSort(int[] arr) {
+        if(arr == null && arr.length == 0)
+            return ;
+        int maxBit = getMaxBit(arr);
+
+        for(int i=1; i<=maxBit; i++) {
+
+            List<List<Integer>> buf = distribute(arr, i); //分配
+            collecte(arr, buf); //收集
+        }
+
+    }
+
+    //分配
+    public static List<List<Integer>> distribute(int[] arr, int iBit) {
+        List<List<Integer>> buf = new ArrayList<List<Integer>>();
+        for(int j=0; j<10; j++) {
+            buf.add(new LinkedList<Integer>());
+        }
+        for(int i=0; i<arr.length; i++) {
+            buf.get(getNBit(arr[i], iBit)).add(arr[i]);
+        }
+        return buf;
+    }
+
+    //收集
+    public static void collecte(int[] arr, List<List<Integer>> buf) {
+        int k = 0;
+        for(List<Integer> bucket : buf) {
+            for(int ele : bucket) {
+                arr[k++] = ele;
+            }
+        }
+
+    }
+
+    //获取最大位数
+    public static int getMaxBit(int[] arr) {
+        int max = Integer.MIN_VALUE;
+        for(int ele : arr) {
+            int len = (ele+"").length();
+            if(len > max)
+                max = len;
+        }
+        return max;
+    }
+
+    //获取x的第n位，如果没有则为0.
+    public static int getNBit(int x, int n) {
+
+        String sx = x + "";
+        if(sx.length() < n)
+            return 0;
+        else
+            return sx.charAt(sx.length()-n) - '0';
+    }
+
+}

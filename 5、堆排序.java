@@ -16,45 +16,42 @@
 
 //大顶堆
 public class HeapSort {
-	public static void heapAdjust(int[] arr, int start, int end) {
-        int temp = arr[start];
 
-        for(int i=2*start+1; i<=end; i*=2) {
+    //将元素array[k]自上往下逐步调整树形结构
+	public static void heapAdjust(int[] array, int k, int length) {
+        int temp = array[k];
+        //i为初始化为节点k的左孩子，沿节点较大的子节点向下调整
+        for(int i = 2 * k + 1; i < length -1  ; i = 2 * i + 1) {
             //左右孩子的节点分别为2*i+1,2*i+2
 
             //选择出左右孩子较小的下标
-            if(i < end && arr[i] < arr[i+1]) {
-                i ++; 
+            if(i < length && array[i] < array[i+1]) {
+                i ++; //如果节点的右孩子>左孩子，则取右孩子节点的下标
             }
-            if(temp >= arr[i]) {
-                break; //已经为大顶堆，=保持稳定性。
+            if(temp >= array[i]) { //根节点 >=左右子女中关键字较大者，保持稳定
+                break; 
+            }else {
+                array[k] = array[i]; //将子节点上移
+                k = i; //【关键】修改k值，以便继续向下调整
             }
-            arr[start] = arr[i]; //将子节点上移
-            start = i; //下一轮筛选
         }
-
-        arr[start] = temp; //插入正确的位置
+        array[k] = temp; //插入正确的位置
     }
 
-    public static void heapSort(int[] arr) {
-        if(arr == null || arr.length == 0)
+    public static void heapSort(int[] array) {
+        if(array == null || array.length == 0)
             return ;
-
-        //建立大顶堆
-        for(int i=arr.length/2; i>=0; i--) {
-            heapAdjust(arr, i, arr.length-1);
+        //建堆：从最后一个节点array.length-1的父节点（array.length-1-1）/2开始，直到根节点0，反复调整堆
+        for (int i = (array.length - 2) / 2; i >= 0; i--) {
+            heapAdjust(array, i, array.length);
         }
-
-        for(int i=arr.length-1; i>=0; i--) {
-            swap(arr, 0, i);
-            heapAdjust(arr, 0, i-1);
+        //排序过程
+        for(int i=array.length-1; i>0; i--) {
+            int temp = array[0];
+            array[0] = array[i];
+            array[i] = temp;
+            heapAdjust(array, 0, i);//整理，将剩余的元素整理成堆
         }
 
     }
-
-	public static void swap(int[] array, int i, int j) {
-		int temp = array[i];
-		array[i] = array[j];
-		array[j] = temp;
-	}
 }
