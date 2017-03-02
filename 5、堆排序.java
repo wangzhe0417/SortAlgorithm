@@ -19,23 +19,19 @@ public class HeapSort {
 
     //将元素array[k]自上往下逐步调整树形结构
 	public static void heapAdjust(int[] array, int k, int length) {
-        int temp = array[k];
-        //i为初始化为节点k的左孩子，沿节点较大的子节点向下调整
-        for(int i = 2 * k + 1; i < length -1  ; i = 2 * i + 1) {
-            //左右孩子的节点分别为2*i+1,2*i+2
-
-            //选择出左右孩子较小的下标
-            if(i < length && array[i] < array[i+1]) {
+        //i为初始化为节点k的左孩子，沿节点较大的子节点向下调整,左右孩子的节点分别为2*i+1,2*i+2
+        for(int i = 2 * k + 1; i < length; i = 2 * i + 1) {
+            //选择出左右孩子较小的下标,i+1<length在前可以排除右孩子不存在而出现的数组下标越界异常
+            if(i < length && i+1 < length && array[i] < array[i+1]) {
                 i ++; //如果节点的右孩子>左孩子，则取右孩子节点的下标
             }
             if(temp >= array[i]) { //根节点 >=左右子女中关键字较大者，保持稳定
                 break; 
             }else {
-                array[k] = array[i]; //将子节点上移
+                swap(array, k, i) //将子节点与根节点交换
                 k = i; //【关键】修改k值，以便继续向下调整
             }
         }
-        array[k] = temp; //插入正确的位置
     }
 
     public static void heapSort(int[] array) {
@@ -47,11 +43,13 @@ public class HeapSort {
         }
         //排序过程
         for(int i=array.length-1; i>0; i--) {
-            int temp = array[0];
-            array[0] = array[i];
-            array[i] = temp;
-            heapAdjust(array, 0, i);//整理，将剩余的元素整理成堆
+            swap(array, 0, i);
+            heapAdjust(array, 0, i-1);//整理，将剩余的元素整理成堆
         }
-
+    }
+    public void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 }
