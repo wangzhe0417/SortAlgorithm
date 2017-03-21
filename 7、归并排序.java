@@ -10,16 +10,16 @@
 
 public class MergeSort {
     public static void mergeSort(int [] array) {
-        mSort(array, 0, array.length-1);
+        divide(array, 0, array.length-1);
     }
 
-    public static void mSort(int [] array, int left, int right) {
+    public static void divide(int [] array, int left, int right) {
         if (left == right) {
             return ;
         }
         int middle = (left + right) / 2;
-        mSort(array, left, middle);
-        mSort(array, middle+1, right);
+        divide(array, left, middle);
+        divide(array, middle+1, right);
         merge(array, left, middle, right);
     }
 
